@@ -45,7 +45,8 @@ export default {
     modules: [
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
-        '@nuxtjs/auth-next'
+        '@nuxtjs/auth-next',
+        '@nuxtjs/dayjs'
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -64,7 +65,7 @@ export default {
                     name: 'XSRF-TOKEN'
                 }
             },
-            'laravelSanctum': {
+            laravelSanctum: {
                 provider: 'laravel/sanctum',
                 url: process.env.API_URL,
                 endpoints: {
@@ -80,6 +81,16 @@ export default {
             callback: '/login',
             home: '/'
         }
+    },
+
+    dayjs: {
+        locales: ['en'],
+        defaultLocale: 'en',
+        defaultTimeZone: 'UTC',
+        plugins: [
+            'utc',
+            'timezone'
+        ]
     },
 
     router: {
