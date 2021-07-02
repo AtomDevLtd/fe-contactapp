@@ -54,6 +54,7 @@
             </ActionMessage>
 
             <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Loading :visible="form.processing" />
                 Save
             </Button>
         </template>
@@ -67,6 +68,7 @@ import FormSection from '~/components/FormSection'
 import Input from '~/components/Input'
 import InputError from '~/components/InputError'
 import Label from '~/components/Label'
+import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -75,7 +77,8 @@ export default {
         FormSection,
         Input,
         InputError,
-        Label
+        Label,
+        Loading
     },
 
     data () {
@@ -102,7 +105,8 @@ export default {
                 this.$axios.put('/user/password', { ...this.form })
                     .then((response) => {
                         this.form.recentlySuccessful = true
-                        this.recentlySuccessfulTimeoutId = setTimeout(() => this.form.recentlySuccessful = false, 2000)
+                        this.form.processing = false
+                        this.recentlySuccessfulTimeoutId = setTimeout(() => this.form.recentlySuccessful = false, 1000)
                     })
                     .catch(({ response }) => {
                         if (response) {
@@ -119,6 +123,7 @@ export default {
                                 this.$refs.current_password.focus()
                             }
                         }
+                        this.form.processing = false
                     })
                     .finally(() => {
                         this.form.processing = false

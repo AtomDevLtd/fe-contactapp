@@ -46,6 +46,7 @@
 
             <div class="flex items-center justify-end mt-4">
                 <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <Loading :visible="form.processing" />
                     Reset Password
                 </Button>
             </div>
@@ -87,6 +88,7 @@ import Input from '~/components/Input'
 import Label from '~/components/Label'
 import ValidationErrors from '~/components/ValidationErrors'
 import BaseTimer from '~/components/BaseTimer'
+import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -96,7 +98,8 @@ export default {
         Input,
         Label,
         ValidationErrors,
-        BaseTimer
+        BaseTimer,
+        Loading
     },
 
     layout: 'auth',

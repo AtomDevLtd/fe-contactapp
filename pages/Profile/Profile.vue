@@ -12,12 +12,6 @@
 
                 <SectionBorder />
             </div>
-
-            <!--        <template>-->
-            <!--          <SectionBorder />-->
-
-            <!--          <delete-user-form class="mt-10 sm:mt-0" />-->
-            <!--        </template>-->
         </div>
     </div>
 </template>

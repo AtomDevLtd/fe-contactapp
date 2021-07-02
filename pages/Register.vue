@@ -95,6 +95,7 @@
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                     >
+                        <Loading :visible="form.processing" />
                         Register
                     </button>
                 </form>
@@ -126,13 +127,15 @@ import AuthenticationCardLogo from '~/components/AuthenticationCardLogo'
 import Checkbox from '~/components/Checkbox'
 import Label from '~/components/Label'
 import ValidationErrors from '~/components/ValidationErrors'
+import Loading from '~/components/Loading'
 
 export default {
     components: {
         AuthenticationCardLogo,
         Checkbox,
         Label,
-        ValidationErrors
+        ValidationErrors,
+        Loading
     },
 
     layout: 'auth',

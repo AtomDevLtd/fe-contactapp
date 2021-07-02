@@ -30,6 +30,7 @@
             </ActionMessage>
 
             <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Loading :visible="form.processing" />
                 Save
             </Button>
         </template>
@@ -43,6 +44,7 @@ import Input from '~/components/Input'
 import InputError from '~/components/InputError'
 import Label from '~/components/Label'
 import ActionMessage from '~/components/ActionMessage'
+import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -51,7 +53,8 @@ export default {
         FormSection,
         Input,
         InputError,
-        Label
+        Label,
+        Loading
     },
 
     props: {
@@ -87,12 +90,14 @@ export default {
                     .then((response) => {
                         this.form.recentlySuccessful = true
                         this.$auth.fetchUser()
+                        this.form.processing = false
                         this.recentlySuccessfulTimeoutId = setTimeout(() => this.form.recentlySuccessful = false, 2000)
                     })
                     .catch(({ response }) => {
                         if (response) {
                             this.form.errors = response.data.errors
                         }
+                        this.form.processing = false
                     })
                     .finally(() => {
                         this.form.processing = false
