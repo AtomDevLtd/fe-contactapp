@@ -354,7 +354,7 @@ export default {
             try {
                 const result = await newList.save()
                 const newArray = [result]
-                this.lists = newArray.concat(this.lists.slice(0, -1))
+                this.lists = newArray.concat(this.lists)
                 this.form.processing = false
                 this.closeNewListModal()
             } catch (error) {
