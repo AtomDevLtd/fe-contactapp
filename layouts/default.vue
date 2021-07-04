@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div v-if="$nuxt.isOffline">
+            <OfflineBlock />
+        </div>
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
@@ -17,6 +20,9 @@
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="{ name: 'Home'}" :active="$route.name === 'Home'">
                                     Dashboard
+                                </NavLink>
+                                <NavLink :href="{ name: 'Lists'}" :active="$route.name === 'Lists'">
+                                    Lists
                                 </NavLink>
                             </div>
                         </div>
@@ -81,6 +87,10 @@
                         <ResponsiveNavLink :href="{ name: 'Home'}" :active="$route.name === 'Home'">
                             Dashboard
                         </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="{ name: 'Lists'}" :active="$route.name === 'Lists'">
+                            Lists
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -128,6 +138,7 @@
 </template>
 
 <script>
+import OfflineBlock from '~/components/OfflineBlock'
 import ApplicationMark from '~/components/ApplicationMark'
 import Dropdown from '~/components/Dropdown'
 import DropdownLink from '~/components/DropdownLink'
@@ -136,6 +147,7 @@ import ResponsiveNavLink from '~/components/ResponsiveNavLink'
 
 export default {
     components: {
+        OfflineBlock,
         ApplicationMark,
         Dropdown,
         DropdownLink,
@@ -143,11 +155,17 @@ export default {
         ResponsiveNavLink
     },
 
-    auth: 'auth',
-
     data () {
         return {
             showingNavigationDropdown: false
+        }
+    },
+
+    head () {
+        return {
+            bodyAttrs: {
+                class: this.$nuxt.isOffline ? 'overflow-hidden' : ''
+            }
         }
     },
 
@@ -165,6 +183,22 @@ export default {
         }
     },
 
+    beforeCreate () {
+        const LOCALE = navigator.language
+
+        if (LOCALE && LOCALE.length === 2) {
+            import(`dayjs/locale/${LOCALE}.js`)
+                .then(() => {
+                    this.$dayjs.locale(LOCALE)
+                    this.$store.commit('SET_LOADING_LOCALE_FINISHED')
+                })
+        } else {
+            this.$store.commit('SET_LOADING_LOCALE_FINISHED')
+        }
+    },
+
+    auth: 'auth',
+
     methods: {
         async logout () {
             await this.$auth.logout('laravelSanctum', {})
@@ -180,3 +214,24 @@ export default {
     }
 }
 </script>
+<style>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 15px, 0);
+}
+
+.layout-enter-active,
+.layout-leave-active {
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+.layout-enter,
+.layout-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 15px, 0);
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-    <teleport to="body">
+    <MountingPortal mount-to="body" append>
         <transition leave-active-class="duration-200">
             <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
                 <transition
@@ -29,45 +29,28 @@
                 </transition>
             </div>
         </transition>
-    </teleport>
+    </MountingPortal>
 </template>
 
 <script>
-import { onMounted, onUnmounted } from 'vue'
+import { MountingPortal } from 'portal-vue'
 
 export default {
-
+    components: {
+        MountingPortal
+    },
     props: {
         show: {
+            type: Boolean,
             default: false
         },
         maxWidth: {
+            type: String,
             default: '2xl'
         },
         closeable: {
+            type: Boolean,
             default: true
-        }
-    },
-    emits: ['close'],
-
-    setup (props, { emit }) {
-        const close = () => {
-            if (props.closeable) {
-                emit('close')
-            }
-        }
-
-        const closeOnEscape = (e) => {
-            if (e.key === 'Escape' && props.show) {
-                close()
-            }
-        }
-
-        onMounted(() => document.addEventListener('keydown', closeOnEscape))
-        onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
-
-        return {
-            close
         }
     },
 
@@ -86,12 +69,36 @@ export default {
     watch: {
         show: {
             immediate: true,
-            handler: (show) => {
+            handler (show) {
                 if (show) {
                     document.body.style.overflow = 'hidden'
                 } else {
+                    this.close()
                     document.body.style.overflow = null
                 }
+            }
+        }
+    },
+
+    created () {
+        const onEscape = (e) => {
+            if (this.show && e.keyCode === 27) {
+                this.close()
+            }
+        }
+
+        // eslint-disable-next-line nuxt/no-globals-in-created
+        document.addEventListener('keydown', onEscape)
+        this.$once('hook:destroyed', () => {
+            // eslint-disable-next-line nuxt/no-globals-in-created
+            document.removeEventListener('keydown', onEscape)
+        })
+    },
+
+    methods: {
+        close () {
+            if (this.closeable) {
+                this.$emit('close')
             }
         }
     }

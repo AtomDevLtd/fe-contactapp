@@ -1,5 +1,5 @@
 <template>
-    <modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
+    <Modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
                 <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -23,26 +23,28 @@
         <div class="px-6 py-4 bg-gray-100 text-right">
             <slot name="footer" />
         </div>
-    </modal>
+    </Modal>
 </template>
 
 <script>
 import Modal from './Modal'
 
 export default {
-
     components: {
         Modal
     },
 
     props: {
         show: {
+            type: Boolean,
             default: false
         },
         maxWidth: {
+            type: String,
             default: '2xl'
         },
         closeable: {
+            type: Boolean,
             default: true
         }
     },

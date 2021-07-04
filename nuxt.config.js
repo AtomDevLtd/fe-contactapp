@@ -27,9 +27,9 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        '@/plugins/vue-placeholders.js',
-        '@/plugins/vue-observe-visibility.client.js',
-        '@/plugins/vue-api-query.js'
+        '~/plugins/vue-placeholders.js',
+        '~/plugins/vue-observe-visibility.client.js',
+        '~/plugins/vue-api-query.js'
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,7 +41,8 @@ export default {
         '@nuxt/typescript-build',
         // https://go.nuxtjs.dev/tailwindcss
         '@nuxtjs/tailwindcss',
-        '@nuxtjs/router-extras'
+        '@nuxtjs/router-extras',
+        '@nuxtjs/svg'
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -92,7 +93,8 @@ export default {
         defaultTimeZone: 'UTC',
         plugins: [
             'utc',
-            'timezone'
+            'timezone',
+            'localizedFormat'
         ]
     },
 

@@ -1,5 +1,5 @@
 <template>
-    <modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
+    <Modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
         <div class="px-6 py-4">
             <div class="text-lg">
                 <slot name="title" />
@@ -13,7 +13,7 @@
         <div class="px-6 py-4 bg-gray-100 text-right">
             <slot name="footer" />
         </div>
-    </modal>
+    </Modal>
 </template>
 
 <script>
@@ -27,16 +27,18 @@ export default {
 
     props: {
         show: {
+            type: Boolean,
             default: false
         },
         maxWidth: {
+            type: String,
             default: '2xl'
         },
         closeable: {
+            type: Boolean,
             default: true
         }
     },
-    emits: ['close'],
 
     methods: {
         close () {
