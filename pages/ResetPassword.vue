@@ -24,6 +24,7 @@
                 <Label for="password" value="Password" />
                 <Input
                     id="password"
+                    ref="password"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
@@ -45,8 +46,7 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    <Loading :visible="form.processing" />
+                <Button :class="{ 'opacity-25': form.processing }" :loading="form.processing">
                     Reset Password
                 </Button>
             </div>
@@ -88,7 +88,6 @@ import Input from '~/components/Input'
 import Label from '~/components/Label'
 import ValidationErrors from '~/components/ValidationErrors'
 import BaseTimer from '~/components/BaseTimer'
-import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -98,8 +97,7 @@ export default {
         Input,
         Label,
         ValidationErrors,
-        BaseTimer,
-        Loading
+        BaseTimer
     },
 
     layout: 'auth',
@@ -159,11 +157,13 @@ export default {
                     .catch(({ response }) => {
                         if (response) {
                             this.errors = response.data.errors
+                            this.form.password = ''
+                            this.form.password_confirmation = ''
+                            this.$refs.password.focus()
                         }
                     })
                     .finally(() => {
                         this.form.processing = false
-                        this.form.email = ''
                     })
             })
         }

@@ -106,7 +106,7 @@
                         Our service provides integration with Klaviyo.
                     </div>
 
-                    <NuxtLink :to="{ name: 'Profile' }">
+                    <NuxtLink :to="{ name: 'ManageKlaviyoIntegration' }">
                         <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
                             <div>Manage your Klaviyo API Key</div>
 

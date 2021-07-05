@@ -17,6 +17,7 @@
     "@nuxtjs/dayjs": "^1.4.0",
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
+    "nuxt-tailvue": "^1.0.91",
     "portal-vue": "^2.1.7",
     "vue-api-query": "^1.9.1",
     "vue-content-placeholders": "^0.2.1",

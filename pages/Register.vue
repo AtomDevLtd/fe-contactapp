@@ -89,15 +89,14 @@
                         </Label>
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
-                        class="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+                        class="w-full mt-6"
                         :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
+                        :loading="form.processing"
                     >
-                        <Loading :visible="form.processing" />
                         Register
-                    </button>
+                    </Button>
                 </form>
 
                 <hr class="my-6 border-gray-300 w-full">
@@ -123,19 +122,19 @@
 </router>
 
 <script>
+import Button from '~/components/Button'
 import AuthenticationCardLogo from '~/components/AuthenticationCardLogo'
 import Checkbox from '~/components/Checkbox'
 import Label from '~/components/Label'
 import ValidationErrors from '~/components/ValidationErrors'
-import Loading from '~/components/Loading'
 
 export default {
     components: {
+        Button,
         AuthenticationCardLogo,
         Checkbox,
         Label,
-        ValidationErrors,
-        Loading
+        ValidationErrors
     },
 
     layout: 'auth',

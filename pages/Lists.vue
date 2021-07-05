@@ -71,7 +71,7 @@
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Contacts count
                                                 </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th v-if="$auth.user.klaviyo_api_key" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     API Integrations
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -104,7 +104,7 @@
                                                             <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                    <td v-if="$auth.user.klaviyo_api_key" class="px-6 py-4 whitespace-nowrap">
                                                         <content-placeholders
                                                             :key="'initialPlaceholdersCol3' + yesOMG + i"
                                                             rounded
@@ -149,10 +149,13 @@
                                                 <ListRow
                                                     v-for="(theList, i) in _lists"
                                                     :key="theList.id"
+                                                    :ref="theList.id"
                                                     v-observe-visibility="
                                                         i === _lists.length - 1 ? lazyLoadLists : false
                                                     "
                                                     :list="theList"
+                                                    :lock-all-buttons="form.processing"
+                                                    @inner-delete-list="deleteList"
                                                 />
                                             </template>
                                             <template v-if="$fetchState.pending && _lists.length">
@@ -173,7 +176,7 @@
                                                             <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                    <td v-if="$auth.user.klaviyo_api_key" class="px-6 py-4 whitespace-nowrap">
                                                         <content-placeholders
                                                             :key="'loadMorePlaceholdersCol3' + yesOMG + i"
                                                             rounded
@@ -248,10 +251,9 @@
                     type="submit"
                     class="ml-2"
                     :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
+                    :loading="form.processing"
                     @click.native="saveNewList"
                 >
-                    <Loading :visible="form.processing" />
                     Create
                 </Button>
             </template>
@@ -277,7 +279,6 @@ import Button from '~/components/Button'
 import SecondaryButton from '~/components/SecondaryButton'
 import Input from '~/components/Input'
 import InputError from '~/components/InputError'
-import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -289,16 +290,15 @@ export default {
         DocumentIcon,
         AddIcon,
         InlineErrorBlock,
-        ListRow,
-        Loading
+        ListRow
     },
 
     layout: 'default',
 
     data () {
         return {
+            cursorForPagination: null,
             createNewListModal: false,
-            currentPage: 1,
             lastPage: 1,
             lists: [],
             form: {
@@ -311,10 +311,13 @@ export default {
 
     async fetch () {
         const lists = await List
-            .page(this.currentPage)
+            .params({
+                cursor: this.cursorForPagination
+            })
             .get()
+
         this.lists = this.lists.concat(lists.data)
-        this.lastPage = lists.meta.last_page
+        this.cursorForPagination = lists.nextCursor ?? null
     },
 
     computed: {
@@ -326,8 +329,7 @@ export default {
     methods: {
         lazyLoadLists (isVisible) {
             if (isVisible) {
-                if (this.currentPage <= this.lastPage) {
-                    this.currentPage++
+                if (this.cursorForPagination !== null) {
                     this.$fetch()
                 }
             }
@@ -365,6 +367,40 @@ export default {
                     this.$refs[firstKey].focus()
                 } else {
                     console.log(error)
+                    this.$router.push({
+                        name: 'Lists'
+                    })
+                }
+            } finally {
+                this.form.processing = false
+            }
+        },
+        async deleteList (key) {
+            this.form.errors = {}
+            this.form.processing = true
+
+            try {
+                const listToBeDeleted = await List.$find(key)
+                await listToBeDeleted.delete()
+                this.lists = this.lists.filter(function (value) {
+                    return value.id !== listToBeDeleted.id
+                })
+                this.form.processing = false
+                this.$toast.show({
+                    type: 'success',
+                    title: 'Hooray',
+                    message: 'The list has been deleted'
+                })
+            } catch (error) {
+                console.log(error)
+                if (error?.response?.status === 422) {
+                    this.form.errors = error.response.data.errors
+                } else {
+                    this.$toast.show({
+                        type: 'danger',
+                        title: 'Oops...there is a problem',
+                        message: error
+                    })
                     this.$router.push({
                         name: 'Lists'
                     })

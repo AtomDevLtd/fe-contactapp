@@ -29,8 +29,7 @@
                 Saved.
             </ActionMessage>
 
-            <Button :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                <Loading :visible="form.processing" />
+            <Button :class="{ 'opacity-25': form.processing }" :loading="form.processing">
                 Save
             </Button>
         </template>
@@ -44,7 +43,6 @@ import Input from '~/components/Input'
 import InputError from '~/components/InputError'
 import Label from '~/components/Label'
 import ActionMessage from '~/components/ActionMessage'
-import Loading from '~/components/Loading'
 
 export default {
     components: {
@@ -53,8 +51,7 @@ export default {
         FormSection,
         Input,
         InputError,
-        Label,
-        Loading
+        Label
     },
 
     props: {
@@ -68,6 +65,7 @@ export default {
         return {
             recentlySuccessfulTimeoutId: null,
             form: {
+                processing: false,
                 name: this.user.name,
                 email: this.user.email,
                 photo: null,

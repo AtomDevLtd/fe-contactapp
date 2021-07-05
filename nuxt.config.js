@@ -50,7 +50,17 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
         '@nuxtjs/auth-next',
-        '@nuxtjs/dayjs'
+        '@nuxtjs/dayjs',
+        ['nuxt-tailvue',
+            {
+                all: true,
+                toast: {
+                    defaultProps: {
+                        timeout: 4
+                    }
+                }
+            }
+        ]
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios

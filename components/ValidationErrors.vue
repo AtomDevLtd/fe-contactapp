@@ -4,16 +4,18 @@
             Whoops! Something went wrong.
         </div>
 
-        <ul class="mt-3 list-disc list-inside text-sm text-red-600">
-            <li v-for="(error, key) in errors" :key="key">
+        <div class="mt-3 list-disc list-inside text-sm text-red-600">
+            <p v-for="(error, key) in errors" :key="key">
                 <span v-if="error.length === 1">
                     {{ error[0] }}
                 </span>
                 <span v-else>
-                    {{ error }}
+                    <p v-for="(singleError, newKey) in error" :key="newKey">
+                        {{ singleError }}
+                    </p>
                 </span>
-            </li>
-        </ul>
+            </p>
+        </div>
     </div>
 </template>
 

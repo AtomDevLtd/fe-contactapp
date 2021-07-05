@@ -1,11 +1,11 @@
 <template>
     <button
         :type="type"
-        class="w-auto bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-5 py-3"
+        class="inline-flex align-middle align-items-center justify-center font-medium focus:outline-none border-2 rounded-lg px-6 py-3 border-gray-200 hover:bg-gray-100"
         :disabled="loading"
-        :class="btnClass"
+        :class="[btnClass, hasRightMargin]"
     >
-        <slot />
+        <slot v-show="! loading" />
     </button>
 </template>
 
@@ -14,9 +14,13 @@ export default {
     props: {
         type: {
             type: String,
-            default: 'submit'
+            default: 'button'
         },
         loading: {
+            type: Boolean,
+            default: false
+        },
+        needsRightMargin: {
             type: Boolean,
             default: false
         }
@@ -26,7 +30,13 @@ export default {
         btnClass () {
             return {
                 'base-spinner': this.loading === true,
-                'cursor-not-allowed': this.loading === true
+                'cursor-not-allowed': this.loading === true,
+                'bg-gray-100': this.loading === true
+            }
+        },
+        hasRightMargin () {
+            return {
+                'mr-5 lg:mr-0': this.needsRightMargin === true
             }
         }
     }
