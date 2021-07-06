@@ -154,7 +154,9 @@
                                                         i === _lists.length - 1 ? lazyLoadLists : false
                                                     "
                                                     :list="theList"
+                                                    :mark-current-row-explicitly-for-key="editListKey"
                                                     :lock-all-buttons="form.processing"
+                                                    @inner-update-list="onEditOpenModal"
                                                     @inner-delete-list="deleteList"
                                                 />
                                             </template>
@@ -219,7 +221,7 @@
                 </div>
             </div>
         </div>
-        <DialogModal :show="createNewListModal" @close="closeNewListModal">
+        <DialogModal :show="openCreateNewModal" @close="closeNewListModal">
             <template #title>
                 Create a new List
             </template>
@@ -255,6 +257,45 @@
                     @click.native="saveNewList"
                 >
                     Create
+                </Button>
+            </template>
+        </DialogModal>
+        <DialogModal :show="openEditModal" @close="closeEditModal">
+            <template #title>
+                Edit List
+            </template>
+
+            <template #content>
+                <div class="my-5">
+                    <Input
+                        ref="name"
+                        v-model="form.name"
+                        :refocus="true"
+                        type="text"
+                        class="block w-full sm:w-3/4 mx-auto"
+                        placeholder="Name"
+                        required
+                        autofocus
+                        @keyup.native.enter="updateList"
+                    />
+
+                    <InputError :message="form.errors.name" class="w-full sm:w-3/4 mx-auto mt-2" />
+                </div>
+            </template>
+
+            <template #footer>
+                <SecondaryButton @click.native="closeEditModal">
+                    Cancel
+                </SecondaryButton>
+
+                <Button
+                    type="submit"
+                    class="ml-2"
+                    :class="{ 'opacity-25': form.processing }"
+                    :loading="form.processing"
+                    @click.native="updateList"
+                >
+                    Update
                 </Button>
             </template>
         </DialogModal>
@@ -298,8 +339,9 @@ export default {
     data () {
         return {
             cursorForPagination: null,
-            createNewListModal: false,
-            lastPage: 1,
+            openCreateNewModal: false,
+            openEditModal: false,
+            editListKey: null,
             lists: [],
             form: {
                 processing: false,
@@ -336,14 +378,29 @@ export default {
         },
 
         closeNewListModal () {
-            this.createNewListModal = false
+            this.openCreateNewModal = false
             this.form.processing = false
             this.form.name = ''
             this.form.errors = {}
         },
 
         openCreateNewListModal () {
-            this.createNewListModal = true
+            this.openCreateNewModal = true
+        },
+
+        closeEditModal () {
+            this.editListKey = null
+            this.openEditModal = false
+            this.form.processing = false
+            this.form.name = ''
+            this.form.errors = {}
+        },
+
+        async onEditOpenModal (key) {
+            this.editListKey = key
+            const listToBeUpdated = await List.$find(key)
+            this.form.name = listToBeUpdated.name
+            this.openEditModal = true
         },
 
         async saveNewList () {
@@ -360,19 +417,38 @@ export default {
                 this.form.processing = false
                 this.closeNewListModal()
             } catch (error) {
-                console.log(error)
                 if (error?.response?.status === 422) {
                     this.form.errors = error.response.data.errors
                     const firstKey = Object.keys(error.response.data.errors)[0]
                     this.$refs[firstKey].focus()
-                } else {
-                    console.log(error)
-                    this.$router.push({
-                        name: 'Lists'
-                    })
                 }
             } finally {
                 this.form.processing = false
+            }
+        },
+        async updateList () {
+            this.form.errors = {}
+            this.form.processing = true
+
+            try {
+                const listToBeUpdated = await List.$find(this.editListKey)
+                listToBeUpdated.name = this.form.name
+                const result = await listToBeUpdated.save()
+                this.lists = this.lists.map(listItem => listItem.id === result.id ? { ...listItem, ...result } : listItem)
+                this.form.processing = false
+                this.closeEditModal()
+                this.$toast.show({
+                    type: 'success',
+                    title: 'Hooray',
+                    message: 'The list has been updated'
+                })
+            } catch (error) {
+                if (error?.response?.status === 422) {
+                    this.form.errors = error.response.data.errors
+                }
+            } finally {
+                this.form.processing = false
+                this.editListKey = null
             }
         },
         async deleteList (key) {
@@ -392,17 +468,12 @@ export default {
                     message: 'The list has been deleted'
                 })
             } catch (error) {
-                console.log(error)
                 if (error?.response?.status === 422) {
-                    this.form.errors = error.response.data.errors
-                } else {
+                    const firstKey = Object.keys(error.response.data.errors)[0]
                     this.$toast.show({
                         type: 'danger',
                         title: 'Oops...there is a problem',
-                        message: error
-                    })
-                    this.$router.push({
-                        name: 'Lists'
+                        message: error.response.data.errors[firstKey][0]
                     })
                 }
             } finally {
