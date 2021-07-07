@@ -24,6 +24,9 @@
                                 <NavLink :href="{ name: 'Lists'}" :active="$route.name === 'Lists'">
                                     Lists
                                 </NavLink>
+                                <NavLink :href="{ name: 'ManageKlaviyoIntegration'}" :active="$route.name === 'ManageKlaviyoIntegration'">
+                                    Klaviyo Integration
+                                </NavLink>
                             </div>
                         </div>
 

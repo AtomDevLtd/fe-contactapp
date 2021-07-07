@@ -18,16 +18,6 @@
             >
                 Remove key
             </SecondaryButton>
-
-            <SecondaryButton
-                v-show="user.klaviyo_api_key"
-                class="mt-5"
-                :class="{ 'opacity-25': form.processing }"
-                :loading="form.processing"
-                @click.native.prevent="testKey"
-            >
-                Test key
-            </SecondaryButton>
         </template>
 
         <template #form>
