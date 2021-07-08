@@ -2,37 +2,26 @@
     <tr>
         <td class="px-6 py-4 whitespace-nowrap" :class="tdRowClasses">
             <div class="flex items-center">
-                <!--                <div class="flex-shrink-0 h-10 w-10">-->
-                <!--                    <div class="bg-gray-400 rounded-full h-10 w-10 flex items-center justify-center capitalize">-->
-                <!--                        {{ list.name.charAt(0) }}-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="ml-4">-->
-                <div class="text-sm text-gray-900">
-                    {{ list.name }}
+                <div class="flex-shrink-0 h-10 w-10">
+                    <div class="bg-gray-400 rounded-full h-10 w-10 flex items-center justify-center capitalize">
+                        {{ contact.name.charAt(0) }}
+                    </div>
                 </div>
-                <!--                </div>-->
+                <div class="ml-4">
+                    <div class="text-sm text-gray-900">
+                        {{ contact.name }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        {{ contact.email }}
+                    </div><div class="text-sm text-gray-500">
+                        {{ contact.phone_formatted }}
+                    </div>
+                </div>
             </div>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-center" :class="tdRowClasses">
-            <NuxtLink :to="{ name: 'Contacts', params: { listId: list.id } }">
-                <div class="flex items-center justify-center text-xs font-semibold text-indigo-700">
-                    <div>
-                        Manage
-                        <span v-if="list.contacts_count !== 0">
-                            {{ list.contacts_count }}
-                        </span>
-                    </div>
-
-                    <div class="ml-1 text-indigo-500">
-                        <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
-                    </div>
-                </div>
-            </NuxtLink>
-        </td>
         <td v-if="$auth.user.klaviyo_api_key" class="px-6 py-4 whitespace-nowrap" :class="tdRowClasses">
-            <div v-if="list.integrations.length > 0">
-                <table v-for="integration in list.integrations" :key="integration.id" class="min-w-full divide-y divide-gray-200">
+            <div v-if="contact.integrations.length > 0">
+                <table v-for="integration in contact.integrations" :key="integration.id" class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" colspan="2" class="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
@@ -107,7 +96,7 @@
                 <TableRowButton
                     :needs-right-margin="true"
                     :loading="lockAllButtons || markCurrentRowExplicitlyForKey !== null"
-                    @click.native.prevent="updateList(list.id)"
+                    @click.native.prevent="updateContact(contact.id)"
                 >
                     <span class="text-indigo-500">
                         Edit
@@ -115,7 +104,7 @@
                 </TableRowButton>
                 <TableRowButton
                     :loading="lockAllButtons || markCurrentRowExplicitlyForKey !== null"
-                    @click.native.prevent="deleteList(list.id)"
+                    @click.native.prevent="deleteContact(contact.id)"
                 >
                     <span class="text-gray-500">
                         Delete
@@ -130,7 +119,7 @@ import TableRowButton from '../TableRowButton'
 export default {
     components: { TableRowButton },
     props: {
-        list: {
+        contact: {
             type: Object,
             default: null
         },
@@ -153,27 +142,27 @@ export default {
     computed: {
         tdRowClasses () {
             return {
-                'bg-gray-100': this.markCurrentRow || (this.markCurrentRowExplicitlyForKey !== null && this.markCurrentRowExplicitlyForKey === this.list.id)
+                'bg-gray-100': this.markCurrentRow || (this.markCurrentRowExplicitlyForKey !== null && this.markCurrentRowExplicitlyForKey === this.contact.id)
             }
         }
     },
 
     methods: {
         getCreatedAt () {
-            return this.$dayjs(this.list.created_at).format('L LT')
+            return this.$dayjs(this.contact.created_at).format('L LT')
         },
 
         getUpdatedAt () {
-            return this.$dayjs(this.list.updated_at).format('L LT')
+            return this.$dayjs(this.contact.updated_at).format('L LT')
         },
 
-        deleteList (item) {
+        deleteContact (item) {
             this.markCurrentRow = true
-            this.$emit('inner-delete-list', item)
+            this.$emit('inner-delete-contact', item)
         },
 
-        updateList (item) {
-            this.$emit('inner-update-list', item)
+        updateContact (item) {
+            this.$emit('inner-update-contact', item)
         }
     }
 }

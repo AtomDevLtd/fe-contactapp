@@ -21,7 +21,7 @@
                                 <NavLink :href="{ name: 'Home'}" :active="$route.name === 'Home'">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="{ name: 'Lists'}" :active="$route.name === 'Lists'">
+                                <NavLink :href="{ name: 'Lists'}" :active="$route.name === 'Lists' || $route.name === 'Contacts'">
                                     Lists
                                 </NavLink>
                                 <NavLink :href="{ name: 'ManageKlaviyoIntegration'}" :active="$route.name === 'ManageKlaviyoIntegration'">
@@ -187,6 +187,7 @@ export default {
     },
 
     beforeCreate () {
+        console.log(this.$route.name)
         const LOCALE = navigator.language
 
         if (LOCALE && LOCALE.length === 2) {

@@ -3,7 +3,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <section
-                    v-if="$fetchState.pending && !_lists.length"
+                    v-if="$fetchState.pending && !_contacts.length"
                     class="bg-white max-w-xs mb-5 px-4 py-5 rounded-3xl mx-auto"
                 >
                     <content-placeholders
@@ -15,17 +15,17 @@
                     </content-placeholders>
                 </section>
                 <section
-                    v-show="! $fetchState.pending && lists.length !== 0"
+                    v-show="! $fetchState.pending && _contacts.length !== 0"
                     class="bg-white max-w-xs mb-5 px-4 py-5 rounded-3xl mx-auto"
                 >
                     <AddIcon class="mx-auto" />
                     <h2 class="mt-2 text-lg font-medium text-center text-gray-800">
-                        Want to add more Lists?
+                        Want to add more Contacts?
                     </h2>
                     <div class="flex flex-col items-center justify-center space-y-1 md:flex-row md:space-y-0 md:space-x-1">
-                        <a class="cursor-pointer" @click.prevent="openCreateNewListModal">
+                        <a class="cursor-pointer" @click.prevent="openCreateNewContactModal">
                             <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
-                                <div>Create a new List</div>
+                                <div>Create a new Contact</div>
 
                                 <div class="ml-1 text-indigo-500">
                                     <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
@@ -33,28 +33,52 @@
                             </div>
                         </a>
                     </div>
+
+                    <div class="flex flex-col items-center justify-center mt-4 space-y-1 md:flex-row md:space-y-0 md:space-x-1">
+                        <NuxtLink :to="{ name: 'Lists' }" class="cursor-pointer text-gray-500 hover:text-gray-700">
+                            <div class="mt-1 flex items-center text-xs font-semibold">
+                                <div class="mr-1 transform rotate-180">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                </div>
+
+                                <div>or go back to all Lists</div>
+                            </div>
+                        </NuxtLink>
+                    </div>
                 </section>
             </div>
             <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <section v-if="! $fetchState.pending && lists.length === 0" class="max-w-lg px-4 py-12 mx-auto">
-                        <DocumentIcon class="mx-auto" />
+                    <section v-if="! $fetchState.pending && contacts.length === 0" class="max-w-lg px-4 py-12 mx-auto">
+                        <ContactIcon class="mx-auto" />
                         <h2 class="mt-2 text-lg font-medium text-center text-gray-800">
-                            No Lists yet
+                            No Contacts in <span class="underline">{{ list.name }}</span> yet
                         </h2>
                         <p class="mt-1 text-center text-gray-600">
-                            You are on the good path of creating your first ever List.
+                            You are on the good path of creating your first ever Contact.
                         </p>
                         <div class="flex flex-col items-center justify-center mt-4 space-y-1 md:flex-row md:space-y-0 md:space-x-1">
-                            <a class="cursor-pointer" @click.prevent="openCreateNewListModal">
+                            <a class="cursor-pointer" @click.prevent="openCreateNewContactModal">
                                 <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
-                                    <div>Create your first List</div>
+                                    <div>Create your first Contact</div>
 
                                     <div class="ml-1 text-indigo-500">
                                         <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                                     </div>
                                 </div>
                             </a>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center mt-4 space-y-1 md:flex-row md:space-y-0 md:space-x-1">
+                            <NuxtLink :to="{ name: 'Lists' }" class="cursor-pointer text-gray-500 hover:text-gray-700">
+                                <div class="mt-3 flex items-center text-xs font-semibold">
+                                    <div class="mr-1 transform rotate-180">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                    </div>
+
+                                    <div>or go back to all Lists</div>
+                                </div>
+                            </NuxtLink>
                         </div>
                     </section>
 
@@ -67,9 +91,6 @@
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Contacts
                                                 </th>
                                                 <th v-if="$auth.user.klaviyo_api_key" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     API Integrations
@@ -86,14 +107,14 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
-                                            <template v-if="$fetchState.pending && !_lists.length">
+                                            <template v-if="$fetchState.pending && !_contacts.length">
                                                 <tr v-for="(yesOMG, i) in 25" :key="'initialPlaceholdersMain' + yesOMG">
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <content-placeholders
                                                             :key="'initialPlaceholdersCol1' + yesOMG + i"
                                                             rounded
                                                         >
-                                                            <content-placeholders-text :lines="1" />
+                                                            <content-placeholders-text :lines="3" />
                                                         </content-placeholders>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -109,7 +130,7 @@
                                                             :key="'initialPlaceholdersCol3' + yesOMG + i"
                                                             rounded
                                                         >
-                                                            <content-placeholders-text :lines="2" />
+                                                            <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -128,14 +149,6 @@
                                                             <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <content-placeholders
-                                                            :key="'initialPlaceholdersCol6' + yesOMG + i"
-                                                            rounded
-                                                        >
-                                                            <content-placeholders-text :lines="1" />
-                                                        </content-placeholders>
-                                                    </td>
                                                 </tr>
                                             </template>
                                             <template v-else-if="$fetchState.error">
@@ -146,28 +159,28 @@
                                                 </tr>
                                             </template>
                                             <template v-else>
-                                                <ListRow
-                                                    v-for="(theList, i) in _lists"
-                                                    :key="theList.id"
-                                                    :ref="theList.id"
+                                                <ContactRow
+                                                    v-for="(theContact, i) in _contacts"
+                                                    :key="theContact.id"
+                                                    :ref="theContact.id"
                                                     v-observe-visibility="
-                                                        i === _lists.length - 1 ? lazyLoadLists : false
+                                                        i === _contacts.length - 1 ? lazyLoadLists : false
                                                     "
-                                                    :list="theList"
-                                                    :mark-current-row-explicitly-for-key="editListKey"
+                                                    :contact="theContact"
+                                                    :mark-current-row-explicitly-for-key="editContactKey"
                                                     :lock-all-buttons="form.processing"
-                                                    @inner-update-list="onEditOpenModal"
-                                                    @inner-delete-list="deleteList"
+                                                    @inner-update-contact="onEditOpenModal"
+                                                    @inner-delete-contact="deleteContact"
                                                 />
                                             </template>
-                                            <template v-if="$fetchState.pending && _lists.length">
+                                            <template v-if="$fetchState.pending && _contacts.length">
                                                 <tr v-for="(yesOMG, i) in 25" :key="'loadMorePlaceholdersMain' + yesOMG">
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <content-placeholders
                                                             :key="'loadMorePlaceholdersCol1' + yesOMG + i"
                                                             rounded
                                                         >
-                                                            <content-placeholders-text :lines="1" />
+                                                            <content-placeholders-text :lines="3" />
                                                         </content-placeholders>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -183,7 +196,7 @@
                                                             :key="'loadMorePlaceholdersCol3' + yesOMG + i"
                                                             rounded
                                                         >
-                                                            <content-placeholders-text :lines="2" />
+                                                            <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -202,14 +215,6 @@
                                                             <content-placeholders-text :lines="1" />
                                                         </content-placeholders>
                                                     </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <content-placeholders
-                                                            :key="'loadMorePlaceholdersCol6' + yesOMG + i"
-                                                            rounded
-                                                        >
-                                                            <content-placeholders-text :lines="1" />
-                                                        </content-placeholders>
-                                                    </td>
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -221,31 +226,58 @@
                 </div>
             </div>
         </div>
-        <DialogModal :show="openCreateNewModal" @close="closeNewListModal">
+        <DialogModal :show="openCreateNewModal" @close="closeNewContactModal">
             <template #title>
-                Create a new List
+                Create a new Contact
             </template>
 
             <template #content>
                 <div class="my-5">
                     <Input
-                        ref="name"
+                        ref="name-new"
                         v-model="form.name"
-                        :refocus="true"
+                        :refocus="true || focusNewName"
                         type="text"
                         class="block w-full sm:w-3/4 mx-auto"
                         placeholder="Name"
                         required
-                        autofocus
-                        @keyup.native.enter="saveNewList"
+                        @keyup.native.enter="saveNewContact"
                     />
 
                     <InputError :message="form.errors.name" class="w-full sm:w-3/4 mx-auto mt-2" />
                 </div>
+
+                <div class="my-5">
+                    <Input
+                        ref="email-new"
+                        v-model="form.email"
+                        type="email"
+                        class="block w-full sm:w-3/4 mx-auto"
+                        placeholder="Email"
+                        required
+                        @keyup.native.enter="saveNewContact"
+                    />
+
+                    <InputError :message="form.errors.email" class="w-full sm:w-3/4 mx-auto mt-2" />
+                </div>
+
+                <div class="my-5">
+                    <Input
+                        ref="phone-new"
+                        v-model="form.phone"
+                        type="text"
+                        class="block w-full sm:w-3/4 mx-auto"
+                        placeholder="Phone"
+                        required
+                        @keyup.native.enter="saveNewContact"
+                    />
+
+                    <InputError :message="form.errors.phone" class="w-full sm:w-3/4 mx-auto mt-2" />
+                </div>
             </template>
 
             <template #footer>
-                <SecondaryButton @click.native="closeNewListModal">
+                <SecondaryButton @click.native="closeNewContactModal">
                     Cancel
                 </SecondaryButton>
 
@@ -254,7 +286,7 @@
                     class="ml-2"
                     :class="{ 'opacity-25': form.processing }"
                     :loading="form.processing"
-                    @click.native="saveNewList"
+                    @click.native="saveNewContact"
                 >
                     Create
                 </Button>
@@ -262,24 +294,51 @@
         </DialogModal>
         <DialogModal :show="openEditModal" @close="closeEditModal">
             <template #title>
-                Edit List
+                Edit Contact
             </template>
 
             <template #content>
                 <div class="my-5">
                     <Input
-                        ref="name"
+                        ref="name-edit"
                         v-model="form.name"
                         :refocus="true"
                         type="text"
                         class="block w-full sm:w-3/4 mx-auto"
                         placeholder="Name"
                         required
-                        autofocus
-                        @keyup.native.enter="updateList"
+                        @keyup.native.enter="updateContact"
                     />
 
                     <InputError :message="form.errors.name" class="w-full sm:w-3/4 mx-auto mt-2" />
+                </div>
+
+                <div class="my-5">
+                    <Input
+                        ref="email-edit"
+                        v-model="form.email"
+                        type="email"
+                        class="block w-full sm:w-3/4 mx-auto"
+                        placeholder="Email"
+                        required
+                        @keyup.native.enter="updateContact"
+                    />
+
+                    <InputError :message="form.errors.email" class="w-full sm:w-3/4 mx-auto mt-2" />
+                </div>
+
+                <div class="my-5">
+                    <Input
+                        ref="phone-edit"
+                        v-model="form.phone"
+                        type="text"
+                        class="block w-full sm:w-3/4 mx-auto"
+                        placeholder="Phone"
+                        required
+                        @keyup.native.enter="updateContact"
+                    />
+
+                    <InputError :message="form.errors.phone" class="w-full sm:w-3/4 mx-auto mt-2" />
                 </div>
             </template>
 
@@ -293,7 +352,7 @@
                     class="ml-2"
                     :class="{ 'opacity-25': form.processing }"
                     :loading="form.processing"
-                    @click.native="updateList"
+                    @click.native="updateContact"
                 >
                     Update
                 </Button>
@@ -304,17 +363,18 @@
 
 <router>
 {
-  path: "/lists",
-  name: "Lists"
+  path: "/lists/:listId",
+  name: "Contacts"
 }
 </router>
 
 <script>
-import DocumentIcon from '~/assets/icons/document.svg?inline'
+import ContactRow from '~/components/Contacts/ContactRow'
+import ContactIcon from '~/assets/icons/contact.svg?inline'
 import AddIcon from '~/assets/icons/add.svg?inline'
 import List from '~/Models/List'
+import Contact from '~/Models/Contact'
 import InlineErrorBlock from '~/components/InlineErrorBlock'
-import ListRow from '~/components/Lists/ListRow'
 import DialogModal from '~/components/DialogModal'
 import Button from '~/components/Button'
 import SecondaryButton from '~/components/SecondaryButton'
@@ -323,15 +383,15 @@ import InputError from '~/components/InputError'
 
 export default {
     components: {
+        ContactRow,
         Input,
         InputError,
         SecondaryButton,
         Button,
         DialogModal,
-        DocumentIcon,
+        ContactIcon,
         AddIcon,
-        InlineErrorBlock,
-        ListRow
+        InlineErrorBlock
     },
 
     layout: 'default',
@@ -341,30 +401,36 @@ export default {
             cursorForPagination: null,
             openCreateNewModal: false,
             openEditModal: false,
-            editListKey: null,
-            lists: [],
+            editContactKey: null,
+            list: null,
+            contacts: [],
             form: {
                 processing: false,
                 name: '',
+                email: '',
+                phone: '',
                 errors: {}
             }
         }
     },
 
     async fetch () {
-        const lists = await List
+        const list = await List.$find(this.$route.params.listId)
+        this.list = list
+        const contacts = await Contact
+            .custom(list, new Contact())
             .params({
                 cursor: this.cursorForPagination
             })
             .get()
 
-        this.lists = this.lists.concat(lists.data)
-        this.cursorForPagination = lists.nextCursor ?? null
+        this.contacts = this.contacts.concat(contacts.data)
+        this.cursorForPagination = contacts.nextCursor ?? null
     },
 
     computed: {
-        _lists () {
-            return this.lists.map(list => new List(list))
+        _contacts () {
+            return this.contacts.map(contact => new Contact(contact))
         }
     },
 
@@ -377,94 +443,107 @@ export default {
             }
         },
 
-        closeNewListModal () {
+        closeNewContactModal () {
             this.openCreateNewModal = false
             this.form.processing = false
             this.form.name = ''
+            this.form.email = ''
+            this.form.phone = ''
             this.form.errors = {}
         },
 
-        openCreateNewListModal () {
+        openCreateNewContactModal () {
             this.openCreateNewModal = true
         },
 
         closeEditModal () {
-            this.editListKey = null
+            this.editContactKey = null
             this.openEditModal = false
             this.form.processing = false
             this.form.name = ''
+            this.form.email = ''
+            this.form.phone = ''
             this.form.errors = {}
         },
 
         async onEditOpenModal (key) {
-            this.editListKey = key
-            const listToBeUpdated = await List.$find(key)
-            this.form.name = listToBeUpdated.name
+            this.editContactKey = key
+            const contactToBeUpdated = await Contact.$find(key)
+            this.form.name = contactToBeUpdated.name
+            this.form.email = contactToBeUpdated.email
+            this.form.phone = contactToBeUpdated.phone
             this.openEditModal = true
         },
 
-        async saveNewList () {
+        async saveNewContact () {
             this.form.errors = {}
             this.form.processing = true
-            const newList = new List({
-                name: this.form.name
-            })
+            const theList = new List({ id: this.$route.params.listId })
+            const newContact = new Contact({
+                name: this.form.name,
+                email: this.form.email,
+                phone: this.form.phone
+            }).config({ url: `${this.list.resource()}/${theList.id}/${new Contact().resource()}` })
 
             try {
-                const result = await newList.save()
+                const result = await newContact.save()
                 const newArray = [result]
-                this.lists = newArray.concat(this.lists)
+                this.contacts = newArray.concat(this.contacts)
                 this.form.processing = false
-                this.closeNewListModal()
+                this.closeNewContactModal()
             } catch (error) {
                 if (error?.response?.status === 422) {
                     this.form.errors = error.response.data.errors
                     const firstKey = Object.keys(error.response.data.errors)[0]
-                    this.$refs[firstKey].focus()
+                    this.$refs[firstKey + '-new'].focus()
                 }
             } finally {
                 this.form.processing = false
             }
         },
-        async updateList () {
+        async updateContact () {
             this.form.errors = {}
             this.form.processing = true
 
             try {
-                const listToBeUpdated = await List.$find(this.editListKey)
-                listToBeUpdated.name = this.form.name
-                const result = await listToBeUpdated.save()
-                this.lists = this.lists.map(listItem => listItem.id === result.id ? { ...listItem, ...result } : listItem)
+                const contactToBeUpdated = await Contact.$find(this.editContactKey)
+                contactToBeUpdated.name = this.form.name
+                contactToBeUpdated.email = this.form.email
+                contactToBeUpdated.phone = this.form.phone
+                const result = await contactToBeUpdated.save()
+                this.contacts = this.contacts.map(contactItem => contactItem.id === result.id ? { ...contactItem, ...result } : contactItem)
                 this.form.processing = false
                 this.closeEditModal()
                 this.$toast.show({
                     type: 'success',
                     title: 'Hooray',
-                    message: 'The list has been updated'
+                    message: 'The contact has been updated'
                 })
             } catch (error) {
                 if (error?.response?.status === 422) {
                     this.form.errors = error.response.data.errors
+                    const firstKey = Object.keys(error.response.data.errors)[0]
+                    this.$refs[firstKey + '-edit'].focus()
                 }
             } finally {
                 this.form.processing = false
             }
         },
-        async deleteList (key) {
+        async deleteContact (key) {
             this.form.errors = {}
             this.form.processing = true
 
             try {
-                const listToBeDeleted = await List.$find(key)
-                await listToBeDeleted.delete()
-                this.lists = this.lists.filter(function (value) {
-                    return value.id !== listToBeDeleted.id
+                const contactToBeDeleted = await Contact.$find(key)
+                await contactToBeDeleted.delete()
+                this.contacts = this.contacts.filter(function (value) {
+                    return value.id !== contactToBeDeleted.id
                 })
                 this.form.processing = false
                 this.$toast.show({
                     type: 'success',
                     title: 'Hooray',
-                    message: 'The list has been deleted'
+                    message: 'The contact has been deleted'
                 })
             } catch (error) {
                 if (error?.response?.status === 422) {
