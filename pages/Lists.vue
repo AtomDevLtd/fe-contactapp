@@ -368,6 +368,18 @@ export default {
         }
     },
 
+    mounted () {
+        this.$echo.private(`lists.forUser.${this.$auth.user.id}`)
+            .listen('.ListHasBeenSynced', (syncedList) => {
+                this.lists = this.lists.map(listItem => listItem.id === syncedList.id ? { ...listItem, ...syncedList } : listItem)
+                console.log(syncedList)
+            })
+    },
+
+    beforeDestroy () {
+        this.$echo.leave(`lists.forUser.${this.$auth.user.id}`)
+    },
+
     methods: {
         lazyLoadLists (isVisible) {
             if (isVisible) {

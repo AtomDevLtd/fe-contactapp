@@ -434,6 +434,18 @@ export default {
         }
     },
 
+    mounted () {
+        this.$echo.private(`contacts.forList.${this.$route.params.listId}`)
+            .listen('.ContactHasBeenSynced', (syncedContact) => {
+                this.contacts = this.contacts.map(contactItem => contactItem.id === syncedContact.id ? { ...contactItem, ...syncedContact } : contactItem)
+                console.log(syncedContact)
+            })
+    },
+
+    beforeDestroy () {
+        this.$echo.leave(`contacts.forList.${this.$route.params.listId}`)
+    },
+
     methods: {
         lazyLoadLists (isVisible) {
             if (isVisible) {

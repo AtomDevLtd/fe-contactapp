@@ -186,8 +186,13 @@ export default {
         }
     },
 
+    mounted () {
+        if (this.$auth.loggedIn) {
+            this.$echo.connect()
+        }
+    },
+
     beforeCreate () {
-        console.log(this.$route.name)
         const LOCALE = navigator.language
 
         if (LOCALE && LOCALE.length === 2) {
@@ -207,6 +212,10 @@ export default {
         async logout () {
             await this.$auth.logout('laravelSanctum', {})
                 .then((response) => {
+                    if (!this.$auth.loggedIn && this.$echo.connector) {
+                        this.$echo.disconnect()
+                    }
+
                     this.$router.push({
                         name: 'login'
                     })

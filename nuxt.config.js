@@ -43,7 +43,8 @@ export default {
         // https://go.nuxtjs.dev/tailwindcss
         '@nuxtjs/tailwindcss',
         '@nuxtjs/router-extras',
-        '@nuxtjs/svg'
+        '@nuxtjs/svg',
+        '@nuxtjs/laravel-echo'
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -63,6 +64,11 @@ export default {
             }
         ]
     ],
+
+    publicRuntimeConfig: {
+        pusherAppKey: process.env.PUSHER_APP_KEY,
+        pusherAppCluster: process.env.PUSHER_APP_CLUSTER
+    },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
@@ -107,6 +113,10 @@ export default {
             'timezone',
             'localizedFormat'
         ]
+    },
+
+    echo: {
+        plugins: ['~/plugins/echo.js']
     },
 
     router: {
