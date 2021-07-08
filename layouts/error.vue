@@ -1,7 +1,7 @@
 <template>
     <section class="px-4 py-24 mx-auto max-w-7xl">
         <div class="grid items-center w-full grid-cols-1 gap-10 mx-auto md:w-4/5 lg:grid-cols-2 xl:gap-32">
-            <div>
+            <div v-if="error.statusCode === 404">
                 <p class="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
                     Error 404
                 </p>
@@ -10,6 +10,20 @@
                 </h1>
                 <p class="mb-5 text-base text-left text-gray-800 md:text-xl">
                     You might have the wrong address, or the page may have moved.
+                </p>
+                <NuxtLink :to="{ name: 'Home' }" class="w-auto bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-5 py-3">
+                    Back to homepage
+                </NuxtLink>
+            </div>
+            <div v-else>
+                <p class="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                    Error {{ error.statusCode }}
+                </p>
+                <h1 class="mb-4 text-2xl font-extrabold leading-tight tracking-tight text-left text-gray-900 md:text-4xl">
+                    The hardest errors are here
+                </h1>
+                <p class="mb-5 text-base text-left text-gray-800 md:text-xl">
+                    Oops now that's a serious problem you've stumbled upon. Our developers are looking at it as we speak.
                 </p>
                 <NuxtLink :to="{ name: 'Home' }" class="w-auto bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-5 py-3">
                     Back to homepage
