@@ -18,7 +18,7 @@
 
 <router>
 {
-  path: "/profile",
+  path: "/profile/",
   name: "Profile"
 }
 </router>

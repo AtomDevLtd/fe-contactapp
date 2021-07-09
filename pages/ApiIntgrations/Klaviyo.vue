@@ -12,7 +12,7 @@
 
 <router>
 {
-  path: "/integrations/klaviyo",
+  path: "/integrations/klaviyo/",
   name: "ManageKlaviyoIntegration"
 }
 </router>

@@ -1,5 +1,5 @@
 <template>
-    <NuxtLink to="/">
+    <NuxtLink :to="{ name: 'Home' }">
         <svg
             width="130px"
             height="95px"

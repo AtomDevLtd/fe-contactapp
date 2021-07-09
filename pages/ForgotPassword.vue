@@ -38,7 +38,7 @@
 
 <router>
 {
-  path: "/forgot-password",
+  path: "/forgot-password/",
   name: "forgotPassword"
 }
 </router>

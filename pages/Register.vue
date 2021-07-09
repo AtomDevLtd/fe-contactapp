@@ -116,7 +116,7 @@
 
 <router>
 {
-  path: "/register",
+  path: "/register/",
   name: "register"
 }
 </router>

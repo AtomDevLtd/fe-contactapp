@@ -363,7 +363,7 @@
 
 <router>
 {
-  path: "/lists/:listId",
+  path: "/lists/:listId/",
   name: "Contacts"
 }
 </router>

@@ -75,7 +75,7 @@
 
 <router>
 {
-  path: "/reset-password",
+  path: "/reset-password/",
   name: "ResetPassword"
 }
 </router>

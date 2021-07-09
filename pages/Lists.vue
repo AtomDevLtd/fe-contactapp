@@ -304,7 +304,7 @@
 
 <router>
 {
-  path: "/lists",
+  path: "/lists/",
   name: "Lists"
 }
 </router>

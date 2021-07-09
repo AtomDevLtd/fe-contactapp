@@ -97,9 +97,9 @@ export default {
             }
         },
         redirect: {
-            login: '/login',
-            logout: '/login',
-            callback: '/login',
+            login: '/login/',
+            logout: '/login/',
+            callback: '/login/',
             home: '/'
         }
     },
@@ -120,7 +120,7 @@ export default {
     },
 
     router: {
-        trailingSlash: false,
+        trailingSlash: true,
         middleware: ['auth']
     },
 
