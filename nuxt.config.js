@@ -120,7 +120,7 @@ export default {
     },
 
     router: {
-        trailingSlash: true,
+        trailingSlash: false,
         middleware: ['auth']
     },
 
